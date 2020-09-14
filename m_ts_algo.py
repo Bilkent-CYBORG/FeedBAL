@@ -97,14 +97,14 @@ def run_smart_ts(emab_episode: emab_model.AbstractEmabEpisode, num_weeks, user_a
                         actions_taken_arr_arr[user.group_id, i, action] += 1
                 removal_set.add(user)
             else:
-                action_feedback_user_list.append((best_action, feedback, user))
+                action_feedback_user_list.append((best_action, feedback, user, ts_agent))
                 user_group_app_sessions_dict[user.group_id][user.emab_episode.t - 2] += feedback / user_arrivals[
                     user.group_id]
-        for action, feedback, user in action_feedback_user_list:
+        for action, feedback, user, ts_agent in action_feedback_user_list:
             ts_agent.update_rewards(action, feedback, user.emab_episode.cost_arr[-1],
                                     user.emab_episode.state_arr[-2] / 2, user.emab_episode.t - 1,
                                     user.emab_episode.state_arr[-2])
-        user_set = set(filter(lambda item: item not in removal_set, user_set))
+        user_set = user_set - removal_set
         week += 1
 
     output = {

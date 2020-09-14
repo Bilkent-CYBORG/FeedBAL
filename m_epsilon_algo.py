@@ -91,13 +91,13 @@ def run_m_epsilon(emab_episode: emab_model.AbstractEmabEpisode, num_weeks, user_
                 removal_set.add(user)
             else:
                 reward = feedback - user.emab_episode.cost_arr[-1]
-                action_reward_list.append((best_action, reward))
+                action_reward_list.append((best_action, reward, epsilon_agent))
                 user_group_app_sessions_dict[user.group_id][user.emab_episode.t - 2] += feedback / user_arrivals[
                     user.group_id]   #(t-1) comes from the fact that when perform_action is called t is incremented by 1 + we are indexing an array
         # update means
-        for action, reward in action_reward_list:
+        for action, reward, epsilon_agent in action_reward_list:
             epsilon_agent.update_rewards(action, reward)
-        user_set = set(filter(lambda item: item not in removal_set, user_set))
+        user_set = user_set - removal_set
         week += 1
 
     output = {

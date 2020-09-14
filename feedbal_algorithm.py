@@ -1,5 +1,6 @@
 import math as math
 import random
+import time
 
 import numpy as np
 
@@ -51,6 +52,7 @@ def run_algorithm(og_emab_episode: emab.AbstractEmabEpisode, delta, num_weeks, u
     n_txa_dict = {}  # maps t to an array of N_txa for different apps
     r_tx_dict = {}  # maps t to value
     g_txa_dict = {}  # maps t to an array of values for apps
+    time_taken_arr = np.zeros(2 * num_weeks - 1)
 
     emab_episode_list = []  # list of users' emab episodes that are used to update counters AFTER each week
     actions_taken_arr_arr = np.zeros((len(user_arrivals), num_weeks - 1, len(og_emab_episode.action_set)))
@@ -67,6 +69,7 @@ def run_algorithm(og_emab_episode: emab.AbstractEmabEpisode, delta, num_weeks, u
         user_group_app_sessions_dict[i] = [0] * (num_weeks - 1)
 
     while week == 1 or len(user_set) > 0:
+        starting_time = time.time()
         if week <= num_weeks:
             # Observe arrived users
             for _ in range(user_arrivals[week - 1]):
@@ -170,10 +173,12 @@ def run_algorithm(og_emab_episode: emab.AbstractEmabEpisode, delta, num_weeks, u
                     a_t = emab_episode.action_taken_arr[index]
                     n_txa_dict[(t_temp, x_t_bin, a_t)] = n_txa_dict.get((t_temp, x_t_bin, a_t), 0) + 1
 
-        user_set = set(filter(lambda item: item not in removal_set, user_set))
+        user_set = user_set - removal_set
+        time_taken_arr[week - 1] = time.time() - starting_time
         week += 1
     output = {
         "actions_taken_arr_arr": actions_taken_arr_arr,
         'num_dropouts': num_dropouts,
-        "user_group_app_sessions_dict": user_group_app_sessions_dict}
+        "user_group_app_sessions_dict": user_group_app_sessions_dict,
+        "time_taken_arr": time_taken_arr}
     return output

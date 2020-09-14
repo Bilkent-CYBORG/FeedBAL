@@ -57,7 +57,7 @@ def perform_benchmark(emab_episode: emab.AbstractEmabEpisode, num_weeks, user_ar
                 user_group_app_sessions_dict[user.group_id][user.emab_episode.t - 2] += feedback
                 if user.emab_episode.t == num_weeks:
                     max_state = max(user.emab_episode.x, max_state)
-        user_set = set(filter(lambda item: item not in removal_set, user_set))
+        user_set = user_set - removal_set
         week += 1
 
     output = {
