@@ -31,15 +31,15 @@ Also, make sure to set the following four variables before running the script.
 
 use_saved_sessions = False
 run = True      # whether to run simulations or just plot the figures using data of already saved results file
-num_threads_to_use = 1  # number of threads to run the simulation on. When set to -1, will run on all available threads
+num_threads_to_use = -1  # number of threads to run the simulation on. When set to -1, will run on all available threads
 
-num_times_sample_users = 2  # the number of times to sample user arrivals and run simulations
-num_times_to_run = 2  # number of times to run simulations with each user arrival sample
+num_times_sample_users = 4  # the number of times to sample user arrivals and run simulations
+num_times_to_run = 8  # number of times to run simulations with each user arrival sample
 # note that total number times the simulation is ran is equal to the product of the above two variables
 
 action_set = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 stop_action = -1
-expected_num_users = 200
+expected_num_users = 20000
 total_num_weeks = 16
 marker_list = ['o', 'v', '^', 'x', 's', 'D']
 
